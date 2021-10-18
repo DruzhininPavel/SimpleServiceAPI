@@ -1,6 +1,6 @@
 package repo
 
-import cats.Applicative
+import cats.Monad
 import cats.implicits.catsSyntaxApplicativeId
 import dto.Image
 
@@ -15,14 +15,13 @@ trait ImagesRepo[F[_]] {
   def update(id: Long, image: Image): F[Unit]
   def delete(id: Long): F[Option[Image]]
   def getRandom(): F[Option[Image]]
-  def unsafeUpdate(id: Long, image: Image): Option[Image]
 }
 
 object ImagesRepo {
   val random: Random = Random
   val repo = new TrieMap[Long, Image]()
 
-  def apply[F[_]]()(implicit F: Applicative[F]): ImagesRepo[F] = new ImagesRepo[F] {
+  def apply[F[_]]()(implicit F: Monad[F]): ImagesRepo[F] = new ImagesRepo[F] {
     override def getAllKeys(): F[List[Long]] = repo.keySet.toList.sorted.pure[F]
 
     override def getAll(): F[List[Image]] = repo.values.toList.pure[F]
@@ -41,11 +40,6 @@ object ImagesRepo {
     }
 
     override def update(id: Long, image: Image): F[Unit] = repo.update(id, image).pure[F]
-
-    def unsafeUpdate(id: Long, image: Image): Option[Image] = {
-      repo.update(id, image)
-      repo.get(id)
-    }
 
     override def delete(id: Long): F[Option[Image]] = repo.remove(id).pure[F]
   }

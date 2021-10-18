@@ -27,14 +27,6 @@ object Server extends IOApp {
   /**
    * Starting server area
    */
-//    val app: Resource[IO, Server[IO]] = for {
-//      blocker <- Blocker
-//      server <- BlazeServerBuilder[IO]
-//        .bindHttp(8080)
-//        .withHttpApp(fileService[IO](FileService.Config(".", blocker)).orNotFound)
-//        .resource
-//    } yield server
-
   def run(args: List[String]): IO[ExitCode] =
     BlazeServerBuilder[IO]
       .bindHttp(8080, "localhost")
