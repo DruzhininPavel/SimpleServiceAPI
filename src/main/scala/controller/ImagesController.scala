@@ -27,13 +27,13 @@ object ImagesController {
 
       case GET -> Root / "random" =>
         for {
-          rand <- OptionT[F, Image](imageService.getRandomImage()).value
+          rand <- imageService.getRandomImage()
           resp <- Ok(rand.asJson)
         } yield resp
 
       case GET -> Root / LongVar(id) =>
         for {
-          image <- OptionT[F, Image](imageService.getImage(id)).value
+          image <- imageService.getImage(id)
           resp  <- Ok(image.asJson)
         } yield resp
 
