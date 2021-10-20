@@ -9,7 +9,7 @@ import service.ImageService
 
 sealed case class Test(test: Long)
 
-object Server extends IOApp {
+object ServerApp extends IOApp {
 
   /**
    * Config and Aggregate area
