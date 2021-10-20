@@ -11,7 +11,7 @@ object HelloWorldController {
     import dsl._
 
     HttpRoutes.of[F] {
-      case GET -> Root / name => Ok(s"Hello, $name.")
+      case req @ GET -> Root => Ok(s"Hello, ${req.params("name")}!")
     }
   }
 

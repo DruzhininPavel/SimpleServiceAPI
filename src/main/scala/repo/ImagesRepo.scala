@@ -31,7 +31,7 @@ object ImagesRepo {
     override def getRandom(): F[Option[Image]] = repo.get(random.between(0, repo.size)).pure[F]
 
     override def create(image: Image): F[Long] = {
-      val newId = repo.keySet.toList.sorted.lastOption match {
+      val newId = repo.keySet.maxOption match {
         case Some(id) => id + 1
         case None => 0L
       }

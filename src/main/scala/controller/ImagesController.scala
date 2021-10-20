@@ -17,29 +17,13 @@ object ImagesController {
     import dsl._
 
     HttpRoutes.of[F] {
-      case GET -> Root / "all" =>
-        for {
-          all  <- imageService.getAll()
-          resp <- Ok(all.asJson)
-        } yield resp
+      case GET -> Root / "all" => Ok(imageService.getAll()).orElse(NotFound())
 
-      case GET -> Root / "random" =>
-        for {
-          rand <- imageService.getRandomImage()
-          resp <- Ok(rand.asJson)
-        } yield resp
+      case GET -> Root / "random" => Ok(imageService.getRandomImage()).orElse(NotFound())
 
-      case GET -> Root / LongVar(id) =>
-        for {
-          image <- imageService.getImage(id)
-          resp  <- Ok(image.asJson)
-        } yield resp
+      case GET -> Root / LongVar(id) => Ok(imageService.getImage(id).flatMap{case Some(image) => image.pure[F]}).orElse(NotFound())
 
-      case POST -> Root / LongVar(id) / "like" =>
-        for {
-          _    <- imageService.likeImage(id)
-          resp <- Ok()
-        } yield resp
+      case POST -> Root / LongVar(id) / "like" => Ok(imageService.likeImage(id).as(())).orElse(NotFound())
 
       case req @ PUT -> Root =>
         for {
