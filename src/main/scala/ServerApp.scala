@@ -2,7 +2,7 @@ import cats.data.Kleisli
 import cats.effect.{ExitCode, IO, IOApp}
 import controller.{HelloWorldController, ImagesController}
 import org.http4s.server.Router
-import org.http4s.server.blaze.BlazeServerBuilder
+import org.http4s.blaze.server.BlazeServerBuilder
 import org.http4s.{HttpRoutes, Request, Response}
 import repo.ImagesRepo
 import service.ImageService

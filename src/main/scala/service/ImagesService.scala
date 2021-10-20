@@ -1,8 +1,7 @@
 package service
 
 import cats.Monad
-import cats.data.OptionT
-import cats.implicits.toFunctorOps
+import cats.implicits._
 import dto.Image
 import repo.ImagesRepo
 
@@ -23,8 +22,10 @@ object ImageService {
   def apply[F[_]](imageRepo: ImagesRepo[F])(implicit F: Monad[F]): ImageService[F] = new ImageService[F] {
     override def getAll(): F[List[Image]] = imageRepo.getAll()
 
-    override def getRandomImage(): F[Option[Image]] = OptionT(imageRepo.getRandom())
-        .semiflatMap(image => updateImage(image.id, image.copy(touched = image.touched + 1)).as(image)).value
+    override def getRandomImage(): F[Option[Image]] =
+      imageRepo
+        .getRandom()
+        .flatTap( im => im.fold(F.pure())(image => updateImage(image.id, image.copy(touched = image.touched + 1))))
 
     override def getImage(id: Long): F[Option[Image]] = imageRepo.get(id)
 
@@ -35,7 +36,9 @@ object ImageService {
     override def deleteImage(id: Long): F[Option[Image]] = imageRepo.delete(id)
 
     override def likeImage(id: Long): F[Unit] = {
-      OptionT(imageRepo.get(id)).cata((), image => updateImage(id, image.copy(liked = image.liked + 1)))
+      imageRepo
+        .get(id)
+        .flatTap(im => im.fold(F.pure())(image => updateImage(id, image.copy(liked = image.liked + 1)))).as(())
     }
   }
 }
