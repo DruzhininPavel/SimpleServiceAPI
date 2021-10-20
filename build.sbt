@@ -8,6 +8,7 @@ val http4sVersion = "0.23.6"
 val catsCoreVersion = "2.6.1"
 val catsEffectVersion = "3.2.9"
 val CirceVersion = "0.14.1"
+val ScalaTestVersion = "3.2.10"
 
 libraryDependencies ++= Seq(
   "org.http4s"      %% "http4s-dsl"           % http4sVersion,
@@ -17,6 +18,5 @@ libraryDependencies ++= Seq(
   "org.typelevel"   %% "cats-core"            % catsCoreVersion,
   "org.typelevel"   %% "cats-effect"          % catsEffectVersion,
   "io.circe"        %% "circe-generic"        % CirceVersion,
+  "org.scalatest"   %% "scalatest"            % ScalaTestVersion % "test"
 )
-
-//scalacOptions ++= Seq("-Ypartial-unification")
