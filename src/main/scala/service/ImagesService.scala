@@ -1,8 +1,8 @@
 package service
 
 import cats.Monad
-import cats.data._
-import cats.implicits._
+import cats.data.OptionT
+import cats.implicits.toFunctorOps
 import dto.Image
 import repo.ImagesRepo
 
