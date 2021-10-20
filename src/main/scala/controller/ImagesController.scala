@@ -1,14 +1,12 @@
 package controller
 
-import cats.data.OptionT
 import cats.effect.Concurrent
 import cats.implicits._
-import dto.Image
 import io.circe.generic.auto._
-import io.circe.syntax._
+import io.circe.syntax.EncoderOps
 import org.http4s.HttpRoutes
 import org.http4s.blaze.http.Url
-import org.http4s.circe._
+import org.http4s.circe.CirceEntityCodec.circeEntityEncoder
 import org.http4s.dsl.Http4sDsl
 import service.ImageService
 

@@ -1,5 +1,5 @@
 import cats.data.Kleisli
-import cats.effect._
+import cats.effect.{ExitCode, IO, IOApp}
 import controller.{HelloWorldController, ImagesController}
 import org.http4s.server.Router
 import org.http4s.server.blaze.BlazeServerBuilder
