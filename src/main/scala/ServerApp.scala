@@ -6,14 +6,14 @@ import org.http4s.blaze.server.BlazeServerBuilder
 import org.http4s.{HttpRoutes, Request, Response}
 import repo.ImagesRepo
 import service.ImageService
-
-sealed case class Test(test: Long)
+import configuration.serverConfig
 
 object ServerApp extends IOApp {
 
   /**
    * Config and Aggregate area
    */
+
   val imageRepo: ImagesRepo[IO] = ImagesRepo()
   val imageService: ImageService[IO] = ImageService[IO](imageRepo)
   val helloWorldRoutes: HttpRoutes[IO] = HelloWorldController.helloWorldRoutes[IO]
@@ -29,7 +29,7 @@ object ServerApp extends IOApp {
    */
   def run(args: List[String]): IO[ExitCode] =
     BlazeServerBuilder[IO]
-      .bindHttp(8080, "localhost")
+      .bindHttp(serverConfig.port, serverConfig.host)
       .withHttpApp(routs)
       .resource
       .use(_ => IO.never)
