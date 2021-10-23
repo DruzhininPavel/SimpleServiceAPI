@@ -26,11 +26,11 @@ class HelloWorldControllerTest extends AnyWordSpec
         val hwRoutes = getResources()
         val name = "John"
         val response = (for {
-          resp <- hwRoutes.run(GET(Uri.unsafeFromString(s"/hello/$name")))
+          resp <- hwRoutes.run(GET(Uri.unsafeFromString(s"/hello?name=$name")))
         } yield resp).unsafeRunSync()
 
         response.status shouldEqual Ok
-        response.body.through(text.utf8.decode).compile.string.unsafeRunSync() shouldEqual s"Hello, $name."
+        response.body.through(text.utf8.decode).compile.string.unsafeRunSync() shouldEqual s"Hello, $name!"
       }
     }
   }
