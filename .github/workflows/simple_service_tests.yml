@@ -20,11 +20,5 @@ jobs:
         with:
           java-version: adopt@1.11
 
-      - name: Scalafmt Scalastyle check
-        run: sbt check scalastyle
-
-      - name: Check dependencies
-        run: sbt clean compile undeclaredCompileDependenciesTest
-
       - name: Run tests
-        run: sbt test
+        run: sbt clean test
