@@ -9,7 +9,7 @@ val catsCoreVersion = "2.6.1"
 val catsEffectVersion = "3.2.9"
 val CirceVersion = "0.14.1"
 val ScalaTestVersion = "3.2.10"
-
+libraryDependencies += "org.apache.kafka" % "kafka-clients" % "2.8.0"
 libraryDependencies ++= Seq(
   "org.http4s"      %% "http4s-dsl"           % http4sVersion,
   "org.http4s"      %% "http4s-blaze-server"  % http4sVersion,
