@@ -1,21 +1,23 @@
+package kafkaservice.producer
+
+import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, ProducerRecord}
 
 import java.util.{Date, Properties}
-import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, ProducerRecord}
-import org.apache.kafka.common.serialization.{IntegerSerializer, StringSerializer}
-
 import scala.util.Random
 
-object KafkaApp {
+object KafkaProducerApp {
   def main(args: Array[String]): Unit = {
     val rnd = new Random()
     val topicName = "test"
+    val host = "localhost:9092"
+    val producerId = "producer-application"
     val events = 1000
     val props = new Properties()
 
-    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.19.0.3:9092")
-    props.put(ProducerConfig.CLIENT_ID_CONFIG, "ScalaProducerExample")
-    props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, classOf[StringSerializer].getName)
-    props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,  classOf[StringSerializer].getName)
+    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, host)
+    props.put(ProducerConfig.CLIENT_ID_CONFIG, producerId)
+    props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer")
+    props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer")
 
     val producer = new KafkaProducer[String, String](props)
 
@@ -32,6 +34,7 @@ object KafkaApp {
       producer.send(data)
     }
 
+    producer.flush()
     System.out.println("sent per second: " + events * 1000 / (System.currentTimeMillis() - t))
     producer.close()
 
