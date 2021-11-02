@@ -1,11 +1,18 @@
 package kafkaservice.consumer
 
+import io.circe.jawn._
 import org.apache.kafka.clients.consumer.{ConsumerConfig, KafkaConsumer}
 
 import java.time.Duration
 import java.util.Properties
 import java.util.regex.Pattern
 import scala.jdk.CollectionConverters._
+import io.circe.syntax._
+import io.circe.generic.auto._
+
+import scala.language.postfixOps
+
+case class KRow(time: Long, id: Long, event: String, userIP: String)
 
 object KafkaConsumerApp {
   def main(args: Array[String]): Unit = {
@@ -26,8 +33,13 @@ object KafkaConsumerApp {
 
     while(true){
       val records = consumer.poll(Duration.ofNanos(100))
+
       for (record <- records.asScala){
-        println(record)
+        val printable = parse(record.value()).getOrElse(throw new Exception).as[KRow] match {
+          case Right(value) => value
+          case Left(e) => throw new Exception(e.message)
+        }
+        println(printable)
       }
     }
   }

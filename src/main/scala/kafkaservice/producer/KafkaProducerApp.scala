@@ -1,9 +1,12 @@
 package kafkaservice.producer
 
+import kafkaservice.consumer.KRow
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, ProducerRecord}
 
 import java.util.{Date, Properties}
 import scala.util.Random
+import io.circe.syntax._
+import io.circe.generic.auto._
 
 object KafkaProducerApp {
   def main(args: Array[String]): Unit = {
@@ -11,7 +14,7 @@ object KafkaProducerApp {
     val topicName = "test"
     val host = "localhost:9092"
     val producerId = "producer-application"
-    val events = 1000
+    val events = 10
     val props = new Properties()
 
     props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, host)
@@ -25,8 +28,8 @@ object KafkaProducerApp {
     for (nEvents <- Range(0, events)) {
       val runtime = new Date().getTime
       val ip = "192.168.2." + rnd.nextInt(255)
-      val msg = runtime + "," + nEvents + ",www.example.com," + ip
-      val data = new ProducerRecord[String, String](topicName, ip, msg)
+      val msg = KRow(runtime, nEvents, "www.example.com", ip).asJson
+      val data = new ProducerRecord[String, String](topicName, ip, msg.noSpaces)
 
       //async
       //producer.send(data, (m,e) => {})
