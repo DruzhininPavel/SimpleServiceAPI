@@ -7,20 +7,19 @@ import java.util.{Date, Properties}
 import scala.util.Random
 import io.circe.syntax._
 import io.circe.generic.auto._
+import configuration.Configs._
 
 object KafkaProducerApp {
   def main(args: Array[String]): Unit = {
     val rnd = new Random()
-    val topicName = "test"
-    val host = "localhost:9092"
-    val producerId = "producer-application"
+    val topicName = producerAppConf.topic
     val events = 10
     val props = new Properties()
 
-    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, host)
-    props.put(ProducerConfig.CLIENT_ID_CONFIG, producerId)
-    props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer")
-    props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer")
+    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, producerAppConf.broker)
+    props.put(ProducerConfig.CLIENT_ID_CONFIG, producerAppConf.producerId)
+    props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, producerAppConf.keySerializer)
+    props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, producerAppConf.valueSerializer)
 
     val producer = new KafkaProducer[String, String](props)
 

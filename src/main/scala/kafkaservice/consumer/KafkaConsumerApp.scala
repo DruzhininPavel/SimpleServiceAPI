@@ -7,24 +7,23 @@ import java.time.Duration
 import java.util.Properties
 import java.util.regex.Pattern
 import scala.jdk.CollectionConverters._
-import io.circe.syntax._
 import io.circe.generic.auto._
 
 import scala.language.postfixOps
+
+import configuration.Configs.consumerAppConf
 
 case class KRow(time: Long, id: Long, event: String, userIP: String)
 
 object KafkaConsumerApp {
   def main(args: Array[String]): Unit = {
-    val topicName = "test"
-    val host = "localhost:9092"
-    val consumerId = "consumer-application"
+    val topicName = consumerAppConf.topic
 
     val  props = new Properties()
-    props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, host)
-    props.put(ConsumerConfig.GROUP_ID_CONFIG, consumerId)
-    props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer")
-    props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer")
+    props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerAppConf.broker)
+    props.put(ConsumerConfig.GROUP_ID_CONFIG, consumerAppConf.consumerId)
+    props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, consumerAppConf.keyDeserializer)
+    props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, consumerAppConf.valueDeserializer)
 
 
     val consumer = new KafkaConsumer[String, String](props)

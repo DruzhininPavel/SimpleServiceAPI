@@ -9,6 +9,15 @@ val catsCoreVersion = "2.6.1"
 val catsEffectVersion = "3.2.9"
 val CirceVersion = "0.14.1"
 val ScalaTestVersion = "3.2.10"
+//val elastic4sVersion = "6.8.20"
+//
+//libraryDependencies ++= Seq(
+//  // recommended client for beginners
+//  "com.sksamuel.elastic4s" %% "elastic4s-client-esjava" % elastic4sVersion,
+//  // test kit
+//  "com.sksamuel.elastic4s" %% "elastic4s-testkit" % elastic4sVersion % "test"
+//)
+
 libraryDependencies += "org.apache.kafka" % "kafka-clients" % "3.0.0"
 libraryDependencies += "org.apache.kafka" % "kafka-streams" % "3.0.0"
 libraryDependencies += "org.apache.kafka" %% "kafka-streams-scala" % "3.0.0"
